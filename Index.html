@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TractorVision - خبير الجرارات الذكي</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #16a34a;
+            --dark: #0f172a;
+            --dark-light: #1e293b;
+            --white: #ffffff;
+            --gray: #94a3b8;
+        }
+
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background-color: var(--dark);
+            color: var(--white);
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            background: var(--dark-light);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            border: 1px solid rgba(22, 163, 74, 0.2);
+        }
+
+        h1 {
+            color: var(--primary);
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        p.subtitle {
+            text-align: center;
+            color: var(--gray);
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        select, input {
+            width: 100%;
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px solid var(--gray);
+            background: var(--dark);
+            color: white;
+            font-family: 'Tajawal', sans-serif;
+        }
+
+        button {
+            width: 100%;
+            padding: 15px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background: #15803d;
+            transform: scale(1.02);
+        }
+
+        .result-box {
+            margin-top: 30px;
+            padding: 20px;
+            background: rgba(22, 163, 74, 0.1);
+            border-radius: 10px;
+            display: none;
+            border-right: 5px solid var(--primary);
+        }
+
+        .price {
+            font-size: 2rem;
+            color: var(--primary);
+            font-weight: 900;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>TractorVision <i class="fas fa-tractor"></i></h1>
+    <p class="subtitle">أدخل بيانات الجرار للحصول على السعر التقديري</p>
+
+    <div class="form-group">
+        <label>ماركة الجرار</label>
+        <select id="brand">
+            <option value="fendt">Fendt (ألماني)</option>
+            <option value="massey">Massey Ferguson</option>
+            <option value="john">John Deere</option>
+            <option value="case">Case IH</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label>سنة الصنع</label>
+        <input type="number" id="year" placeholder="مثال: 2015" min="1980" max="2026">
+    </div>
+
+    <div class="form-group">
+        <label>ساعات العمل (Hours)</label>
+        <input type="number" id="hours" placeholder="مثال: 5000">
+    </div>
+
+    <button onclick="calculatePrice()">احسب السعر الآن</button>
+
+    <div id="result" class="result-box">
+        <h3>النتيجة التقديرية:</h3>
+        <p id="output-text"></p>
+        <div class="price" id="output-price"></div>
+        <p style="font-size: 0.8rem; color: var(--gray); margin-top: 10px;">* هذا السعر تقريبي بناءً على بيانات السوق الحالية.</p>
+    </div>
+</div>
+
+<script>
+    function calculatePrice() {
+        const brand = document.getElementById('brand').value;
+        const year = parseInt(document.getElementById('year').value);
+        const hours = parseInt(document.getElementById('hours').value);
+        
+        if (!year || !hours) {
+            alert("الرجاء إدخال السنة وساعات العمل");
+            return;
+        }
+
+        // منطق حسابي بسيط للبدء
+        let basePrice = 0;
+        if (brand === 'fendt') basePrice = 80000;
+        else if (brand === 'john') basePrice = 70000;
+        else basePrice = 50000;
+
+        // تقليل السعر بناءً على العمر (5% كل سنة)
+        let age = 2026 - year;
+        let finalPrice = basePrice - (age * 2000);
+
+        // تقليل السعر بناءً على ساعات العمل
+        finalPrice = finalPrice - (hours * 2);
+
+        if (finalPrice < 5000) finalPrice = 5000; // الحد الأدنى للسعر
+
+        document.getElementById('result').style.display = 'block';
+        document.getElementById('output-text').innerText = "جرار " + brand.toUpperCase() + " موديل " + year;
+        document.getElementById('output-price').innerText = finalPrice.toLocaleString() + " دولار تقريباً";
+    }
+</script>
+
+</body>
+</html>
