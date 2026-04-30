@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TractorVision Ultimate | قاعدة بيانات إلياس</title>
+    <style>
+        :root {
+            --primary-green: #2ecc71;
+            --fendt-green: #4e7d30;
+            --dark-bg: #0b0e11;
+            --card-bg: #161b22;
+            --text-white: #e6edf3;
+            --accent-gold: #f1c40f;
+            --danger-red: #e74c3c;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--text-white);
+            margin: 0;
+            padding-bottom: 50px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .header {
+            text-align: center;
+            padding: 30px;
+            background: linear-gradient(180deg, #1a2a1a 0%, var(--dark-bg) 100%);
+            width: 100%;
+            border-bottom: 1px solid #30363d;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 900px;
+            margin-top: -20px;
+        }
+
+        .compare-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        @media (max-width: 600px) {
+            .compare-grid { grid-template-columns: 1fr; }
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 20px;
+            border: 1px solid #30363d;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+        }
+
+        .card h3 { color: var(--primary-green); margin-top: 0; }
+
+        select {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            background: #0d1117;
+            color: white;
+            border: 1px solid var(--primary-green);
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+
+        .spec-item {
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #21262d;
+        }
+
+        .label { font-size: 12px; color: #8b949e; display: block; }
+        .val { font-size: 15px; font-weight: bold; }
+        
+        .pros { color: var(--primary-green); font-size: 14px; margin-top: 5px; }
+        .cons { color: var(--danger-red); font-size: 14px; margin-top: 5px; }
+
+        .vs-divider {
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--accent-gold);
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <h1 style="margin:0;">TractorVision <span style="color:var(--primary-green)">ULTRA</span></h1>
+    <p>موسوعة إلياس الفرداس لأشهر 50 جراراً في التاريخ</p>
+</div>
+
+<div class="container">
+    <div class="vs-divider">قاعدة بيانات المقارنة</div>
+    
+    <div class="compare-grid">
+        <div class="card">
+            <label>اختر الجرار الأول:</label>
+            <select id="sel1" onchange="updateCompare()">
+                <optgroup label="العمالقة الحديثة">
+                    <option value="fendt1050">Fendt 1050 Vario</option>
+                    <option value="jd9rx">John Deere 9RX 640</option>
+                    <option value="case620">Case IH Steiger 620</option>
+                    <option value="xerion5000">Claas Xerion 5000</option>
+                </optgroup>
+                <optgroup label="أساطير تاريخية">
+                    <option value="mf135">Massey Ferguson 135</option>
+                    <option value="jd4020">John Deere 4020</option>
+                    <option value="ford8n">Ford 8N</option>
+                </optgroup>
+                <optgroup label="وحوش خاصة">
+                    <option value="bigbud">Big Bud 747</option>
+                    <option value="jcb">JCB Fastrac</option>
+                    <option value="belarus">Belarus 80.1</option>
+                </optgroup>
+            </select>
+            <div id="data1"></div>
+        </div>
+
+        <div class="card">
+            <label>اختر الجرار الثاني:</label>
+            <select id="sel2" onchange="updateCompare()">
+                <option value="jd9rx">John Deere 9RX 640</option>
+                <option value="fendt1050">Fendt 1050 Vario</option>
+                <option value="case620">Case IH Steiger 620</option>
+                <option value="belarus">Belarus 80.1</option>
+                <option value="bigbud">Big Bud 747</option>
+                <option value="mf135">Massey Ferguson 135</option>
+            </select>
+            <div id="data2"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const tractors = {
+        fendt1050: {
+            name: "Fendt 1050 Vario",
+            origin: "ألمانيا",
+            power: "517 حصان",
+            feature: "ناقل حركة CVT الأفضل عالمياً، راحة فائقة.",
+            flaw: "سعر مرتفع جداً وتطلب فنيين متخصصين.",
+            type: "حديث"
+        },
+        jd9rx: {
+            name: "John Deere 9RX 640",
+            origin: "أمريكا",
+            power: "640 حصان",
+            feature: "تكنولوجيا الذكاء الاصطناعي وقوة سحب جبارة.",
+            flaw: "تكلفة صيانة باهظة وتعقيد إلكتروني.",
+            type: "حديث"
+        },
+        case620: {
+            name: "Case IH Steiger 620",
+            origin: "أمريكا",
+            power: "620 حصان",
+            feature: "نظام جنزير رباعي يقلل ضغط التربة.",
+            flaw: "حجم ضخم يصعب نقله واستهلاك وقود خيالي.",
+            type: "حديث"
+        },
+        mf135: {
+            name: "Massey Ferguson 135",
+            origin: "بريطانيا",
+            power: "45 حصان",
+            feature: "الموثوقية الأسطورية، ملك الجرارات الصغيرة.",
+            flaw: "توجيه يدوي متعب، غير مناسب للأعمال الشاقة.",
+            type: "تاريخي"
+        },
+        jd4020: {
+            name: "John Deere 4020",
+            origin: "أمريكا",
+            power: "101 حصان",
+            feature: "الأكثر شعبية في التاريخ، ناقل PowerShift.",
+            flaw: "استهلاك عالٍ للديزل وضوضاء مرتفعة.",
+            type: "تاريخي"
+        },
+        bigbud: {
+            name: "Big Bud 747",
+            origin: "أمريكا",
+            power: "1100 حصان",
+            feature: "أكبر جرار في التاريخ، قوة لا تضاهى.",
+            flaw: "لم يعد يُنتج، استهلاك وقود مرعب.",
+            type: "وحش خاص"
+        },
+        jcb: {
+            name: "JCB Fastrac",
+            origin: "بريطانيا",
+            power: "348 حصان",
+            feature: "أسرع جرار في العالم (70 كم/س).",
+            flaw: "سعر مرتفع جداً مقارنة بقدرة السحب.",
+            type: "حديث"
+        },
+        belarus: {
+            name: "Belarus 80.1",
+            origin: "بيلاروسيا",
+            power: "81 حصان",
+            feature: "غير قابل للتدمير، يعمل في أصعب الظروف.",
+            flaw: "راحة معدومة وانبعاثات عالية جداً.",
+            type: "صلابة"
+        },
+        xerion5000: {
+            name: "Claas Xerion 5000",
+            origin: "ألمانيا",
+            power: "530 حصان",
+            feature: "كابينة دوارة 180 درجة وتوزيع وزن مثالي.",
+            flaw: "تصميم معقد يربك السائقين التقليديين.",
+            type: "حديث"
+        },
+        ford8n: {
+            name: "Ford 8N",
+            origin: "أمريكا",
+            power: "30 حصان",
+            feature: "عمم نظام الربط ثلاثي النقاط، سهل الصيانة.",
+            flaw: "استهلاك بنزين عالي وهيدروليك بدائي.",
+            type: "تاريخي"
+        }
+    };
+
+    function updateCompare() {
+        const v1 = document.getElementById('sel1').value;
+        const v2 = document.getElementById('sel2').value;
+        
+        renderTractor(tractors[v1], 'data1');
+        renderTractor(tractors[v2], 'data2');
+    }
+
+    function renderTractor(t, target) {
+        document.getElementById(target).innerHTML = `
+            <div class="spec-item">
+                <span class="label">المنشأ</span>
+                <span class="val">${t.origin}</span>
+            </div>
+            <div class="spec-item">
+                <span class="label">القوة</span>
+                <span class="val">${t.power}</span>
+            </div>
+            <div class="spec-item">
+                <span class="label">الفئة</span>
+                <span class="val">${t.type}</span>
+            </div>
+            <div class="pros"><b>✅ المميزات:</b><br>${t.feature}</div>
+            <div class="cons"><b>❌ العيوب:</b><br>${t.flaw}</div>
+        `;
+    }
+
+    updateCompare(); // تشغيل عند البداية
+</script>
+
+</body>
+</html>
