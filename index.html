@@ -11,6 +11,13 @@
             --dark-bg: #1a1a1a;
             --card-bg: #2d2d2d;
             --text-white: #ffffff;
+            --error-red: #e74c3c;
+            --warning-yellow: #f39c12;
+            --success-green: #2ecc71;
+        }
+
+        * {
+            box-sizing: border-box;
         }
 
         body {
@@ -31,15 +38,24 @@
             border-radius: 15px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
             width: 100%;
-            max-width: 450px;
+            max-width: 500px;
             border-top: 5px solid var(--primary-green);
         }
 
         h1 {
             text-align: center;
             color: var(--primary-green);
+            margin-bottom: 10px;
+            margin-top: 0;
+            font-size: 28px;
+        }
+
+        .subtitle {
+            text-align: center;
+            font-size: 13px;
+            color: #999;
             margin-bottom: 25px;
-            font-size: 24px;
+            font-style: italic;
         }
 
         .input-group {
@@ -47,8 +63,18 @@
         }
 
         label {
-            display: block;
+            display: flex;
+            align-items: center;
             margin-bottom: 8px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .help-icon {
+            cursor: help;
+            color: var(--primary-green);
+            margin-right: 5px;
+            font-size: 14px;
             font-weight: bold;
         }
 
@@ -56,45 +82,160 @@
             width: 100%;
             padding: 12px;
             border-radius: 8px;
-            border: none;
+            border: 2px solid #454545;
             background-color: #3d3d3d;
             color: white;
-            font-size: 16px;
-            box-sizing: border-box;
+            font-size: 15px;
+            transition: border-color 0.3s ease;
+        }
+
+        select:focus, input:focus {
+            outline: none;
+            border-color: var(--primary-green);
+            background-color: #454545;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
         }
 
         button {
-            width: 100%;
+            flex: 1;
             padding: 15px;
             background-color: var(--primary-green);
             color: white;
             border: none;
             border-radius: 8px;
-            font-size: 18px;
+            font-size: 16px;
             font-weight: bold;
             cursor: pointer;
-            transition: background 0.3s ease;
+            transition: all 0.3s ease;
         }
 
         button:hover {
             background-color: var(--dark-green);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(46, 204, 113, 0.3);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .btn-secondary {
+            background-color: #555;
+        }
+
+        .btn-secondary:hover {
+            background-color: #666;
+        }
+
+        .error-message {
+            background-color: rgba(231, 76, 60, 0.2);
+            border-right: 4px solid var(--error-red);
+            color: #ff7675;
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            display: none;
+            font-size: 14px;
         }
 
         .result {
             margin-top: 25px;
-            padding: 15px;
-            background-color: #383838;
+            padding: 20px;
+            background-color: rgba(46, 204, 113, 0.1);
             border-radius: 8px;
-            text-align: center;
+            border-right: 4px solid var(--primary-green);
             display: none;
         }
 
+        .result-title {
+            font-size: 14px;
+            color: #aaa;
+            margin-bottom: 10px;
+        }
+
         .price {
-            font-size: 22px;
+            font-size: 32px;
             color: var(--primary-green);
             font-weight: bold;
             display: block;
-            margin-top: 10px;
+            margin-bottom: 15px;
+        }
+
+        .breakdown {
+            background-color: #383838;
+            padding: 15px;
+            border-radius: 6px;
+            font-size: 13px;
+            line-height: 1.8;
+        }
+
+        .breakdown-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .breakdown-item:last-child {
+            margin-bottom: 0;
+            border-top: 1px solid #555;
+            padding-top: 8px;
+            margin-top: 8px;
+            font-weight: bold;
+            color: var(--primary-green);
+        }
+
+        .breakdown-label {
+            color: #bbb;
+        }
+
+        .info-box {
+            background-color: rgba(243, 156, 18, 0.1);
+            border-right: 4px solid var(--warning-yellow);
+            padding: 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            margin-top: 15px;
+            color: #daa;
+        }
+
+        .info-box h4 {
+            margin-top: 0;
+            margin-bottom: 8px;
+            color: var(--warning-yellow);
+        }
+
+        .info-box ul {
+            margin: 0;
+            padding-right: 20px;
+        }
+
+        .info-box li {
+            margin-bottom: 4px;
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 20px;
+                max-width: 100%;
+            }
+
+            h1 {
+                font-size: 22px;
+            }
+
+            button {
+                font-size: 14px;
+                padding: 12px;
+            }
+
+            .price {
+                font-size: 24px;
+            }
         }
     </style>
 </head>
@@ -102,71 +243,314 @@
 
 <div class="container">
     <h1>🚜 TractorVision</h1>
-    <p style="text-align: center; font-size: 14px; color: #bbb;">أداة إلياس لتقدير أسعار المعدات الثقيلة</p>
+    <p class="subtitle">حاسبة ذكية لتقدير أسعار الجرارات والمعدات الثقيلة</p>
     
-    <div class="input-group">
-        <label>نوع الجرار</label>
-        <select id="brand">
-            <option value="fendt">Fendt (بريميوم)</option>
-            <option value="johndeere">John Deere</option>
-            <option value="massey">Massey Ferguson</option>
-            <option value="steyr">Steyr</option>
-            <option value="other">ماركة أخرى</option>
-        </select>
-    </div>
+    <div id="error-message" class="error-message"></div>
 
-    <div class="input-group">
-        <label>سنة الصنع</label>
-        <input type="number" id="year" placeholder="مثلاً 2018" min="1990" max="2026">
-    </div>
+    <form id="calculator-form">
+        <div class="input-group">
+            <label>
+                <span class="help-icon" title="اختر ماركة الجرار">ℹ️</span>
+                نوع الجرار / الماركة
+            </label>
+            <select id="brand" required>
+                <option value="">-- اختر ماركة --</option>
+                <option value="fendt">Fendt (بريميوم - فندت)</option>
+                <option value="johndeere">John Deere (جون ديري)</option>
+                <option value="massey">Massey Ferguson (ماسي فيرجسون)</option>
+                <option value="steyr">Steyr (شتاير)</option>
+                <option value="kubota">Kubota (كوبوتا)</option>
+                <option value="case">Case IH</option>
+                <option value="other">ماركة أخرى</option>
+            </select>
+        </div>
 
-    <div class="input-group">
-        <label>ساعات العمل (Hours)</label>
-        <input type="number" id="hours" placeholder="مثلاً 5000">
-    </div>
+        <div class="input-group">
+            <label>
+                <span class="help-icon" title="السنة التي تم صنع الجرار">ℹ️</span>
+                سنة الصنع / الموديل
+            </label>
+            <input type="number" id="year" placeholder="مثلاً 2018" min="1990" max="2026" required>
+        </div>
 
-    <button onclick="calculatePrice()">احسب السعر التقريبي</button>
+        <div class="input-group">
+            <label>
+                <span class="help-icon" title="عدد ساعات التشغيل الكلية">ℹ️</span>
+                ساعات العمل / التشغيل
+            </label>
+            <input type="number" id="hours" placeholder="مثلاً 5000" min="0" max="100000" required>
+        </div>
+
+        <div class="input-group">
+            <label>
+                <span class="help-icon" title="حالة الجرار العامة">ℹ️</span>
+                حالة الجرار
+            </label>
+            <select id="condition" required>
+                <option value="">-- اختر الحالة --</option>
+                <option value="excellent">ممتازة (كسيح / جديد نسبياً)</option>
+                <option value="good">جيدة (في حالة عمل جيدة)</option>
+                <option value="fair">عادلة (بحاجة لصيانة بسيطة)</option>
+                <option value="poor">سيئة (بحاجة إصلاحات كبيرة)</option>
+            </select>
+        </div>
+
+        <div class="input-group">
+            <label>
+                <span class="help-icon" title="اختر عملة العرض">ℹ️</span>
+                العملة
+            </label>
+            <select id="currency">
+                <option value="eur">€ يورو</option>
+                <option value="usd">$ دولار أمريكي</option>
+                <option value="sar">﷼ ريال سعودي</option>
+                <option value="aed">د.إ درهم إماراتي</option>
+            </select>
+        </div>
+
+        <div class="button-group">
+            <button type="submit" id="calculate-btn">احسب السعر التقريبي</button>
+            <button type="reset" class="btn-secondary" id="reset-btn">إعادة تعيين</button>
+        </div>
+    </form>
 
     <div id="result" class="result">
-        <span id="result-text">السعر المتوقع في السوق:</span>
+        <div class="result-title">السعر المتوقع في السوق:</div>
         <span id="price-display" class="price"></span>
+        
+        <div class="breakdown">
+            <div class="breakdown-item">
+                <span class="breakdown-label">السعر الأساسي:</span>
+                <span id="base-price-display">-</span>
+            </div>
+            <div class="breakdown-item">
+                <span class="breakdown-label">خصم العمر:</span>
+                <span id="age-discount-display">-</span>
+            </div>
+            <div class="breakdown-item">
+                <span class="breakdown-label">خصم ساعات العمل:</span>
+                <span id="hours-discount-display">-</span>
+            </div>
+            <div class="breakdown-item">
+                <span class="breakdown-label">معامل الحالة:</span>
+                <span id="condition-factor-display">-</span>
+            </div>
+            <div class="breakdown-item">
+                <span class="breakdown-label">السعر النهائي المقدر:</span>
+                <span id="final-price-display">-</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="info-box">
+        <h4>📌 معلومات مهمة</h4>
+        <ul>
+            <li>هذا التقدير تقريبي بناءً على معايير السوق العامة</li>
+            <li>السعر الفعلي قد يختلف حسب الموقع والحالة الحقيقية</li>
+            <li>ننصح بفحص ميكانيكي شامل قبل الشراء</li>
+            <li>تأكد من توثيق ملكية الجرار والصيانة الدورية</li>
+        </ul>
     </div>
 </div>
 
 <script>
+    // ===== إعدادات ثابتة =====
+    const PRICE_CONFIG = {
+        fendt: { base: 85000, depreciationRate: 0.08 },
+        johndeere: { base: 75000, depreciationRate: 0.07 },
+        massey: { base: 60000, depreciationRate: 0.06 },
+        steyr: { base: 65000, depreciationRate: 0.07 },
+        kubota: { base: 55000, depreciationRate: 0.06 },
+        case: { base: 70000, depreciationRate: 0.065 },
+        other: { base: 50000, depreciationRate: 0.05 }
+    };
+
+    const CONDITION_MULTIPLIERS = {
+        excellent: 1.15,
+        good: 1.0,
+        fair: 0.80,
+        poor: 0.60
+    };
+
+    const CURRENCY_SYMBOLS = {
+        eur: '€',
+        usd: '$',
+        sar: '﷼',
+        aed: 'د.إ'
+    };
+
+    const CURRENCY_RATES = {
+        eur: 1,
+        usd: 1.1,
+        sar: 4.15,
+        aed: 4.03
+    };
+
+    const HOUR_DEDUCTION_PER_100 = 200; // خصم 200 يورو لكل 100 ساعة
+    const MIN_PRICE = 5000;
+    const CURRENT_YEAR = 2026;
+
+    // ===== متغيرات عامة =====
+    const form = document.getElementById('calculator-form');
+    const errorDiv = document.getElementById('error-message');
+
+    // ===== التعامل مع نموذج الحساب =====
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        calculatePrice();
+    });
+
+    // ===== دالة الحساب الرئيسية =====
     function calculatePrice() {
+        // حذف الرسائل السابقة
+        hideError();
+
+        // الحصول على القيم من المدخلات
         const brand = document.getElementById('brand').value;
         const year = parseInt(document.getElementById('year').value);
         const hours = parseInt(document.getElementById('hours').value);
-        
-        if (isNaN(year) || isNaN(hours)) {
-            alert("يرجى إدخال السنة وساعات العمل بشكل صحيح");
+        const condition = document.getElementById('condition').value;
+        const currency = document.getElementById('currency').value;
+
+        // التحقق من صحة المدخلات
+        const validation = validateInputs(brand, year, hours, condition);
+        if (!validation.valid) {
+            showError(validation.message);
             return;
         }
 
-        // معادلة افتراضية للتقدير (يمكنك تعديلها بناءً على خبرتك)
-        let basePrice = 50000; 
-        
-        if (brand === 'fendt') basePrice = 80000;
-        if (brand === 'johndeere') basePrice = 70000;
+        // حساب السعر
+        const calculation = calculateEstimatedPrice(brand, year, hours, condition, currency);
 
-        // خصم السعر بناءً على العمر (5% لكل سنة)
-        const currentYear = 2026;
-        const age = currentYear - year;
-        let estimatedPrice = basePrice - (age * 3000);
-
-        // خصم بناءً على الساعات (مثلاً 2 دولار لكل ساعة)
-        estimatedPrice = estimatedPrice - (hours * 2);
-
-        // التأكد من أن السعر لا ينزل عن حد معين
-        if (estimatedPrice < 5000) estimatedPrice = 5000;
-
-        const display = document.getElementById('result');
-        const priceDisplay = document.getElementById('price-display');
-        
-        display.style.display = 'block';
-        priceDisplay.innerText = estimatedPrice.toLocaleString() + " يورو";
+        // عرض النتائج
+        displayResults(calculation, currency);
     }
+
+    // ===== دالة التحقق من صحة المدخلات =====
+    function validateInputs(brand, year, hours, condition) {
+        if (!brand) {
+            return { valid: false, message: '⚠️ يرجى اختيار ماركة الجرار' };
+        }
+
+        if (isNaN(year) || year < 1990 || year > CURRENT_YEAR) {
+            return { valid: false, message: `⚠️ يرجى إدخال سنة صحيحة بين 1990 و ${CURRENT_YEAR}` };
+        }
+
+        if (isNaN(hours) || hours < 0 || hours > 100000) {
+            return { valid: false, message: '⚠️ يرجى إدخال عدد ساعات صحيح (0 - 100000)' };
+        }
+
+        if (!condition) {
+            return { valid: false, message: '⚠️ يرجى اختيار حالة الجرار' };
+        }
+
+        return { valid: true };
+    }
+
+    // ===== دالة حساب السعر المقدر =====
+    function calculateEstimatedPrice(brand, year, hours, condition, currency) {
+        // 1. السعر الأساسي
+        const config = PRICE_CONFIG[brand] || PRICE_CONFIG.other;
+        let basePrice = config.base;
+
+        // 2. حساب الخصم بناءً على العمر (استهلاك غير خطي)
+        const age = CURRENT_YEAR - year;
+        let ageDiscount = 0;
+        
+        if (age > 0) {
+            // استهلاك أسرع في السنوات الأولى
+            const depreciationFactor = config.depreciationRate;
+            ageDiscount = basePrice * (1 - Math.pow(1 - depreciationFactor, age));
+        }
+
+        // 3. خصم بناءً على ساعات العمل
+        const hoursDiscount = (hours / 100) * HOUR_DEDUCTION_PER_100;
+
+        // 4. معامل الحالة
+        const conditionMultiplier = CONDITION_MULTIPLIERS[condition];
+
+        // 5. حساب السعر المقدر
+        let estimatedPrice = basePrice - ageDiscount - hoursDiscount;
+        estimatedPrice = estimatedPrice * conditionMultiplier;
+
+        // 6. التأكد من الحد الأدنى للسعر
+        if (estimatedPrice < MIN_PRICE) {
+            estimatedPrice = MIN_PRICE;
+        }
+
+        // 7. تحويل العملة
+        const currencyRate = CURRENCY_RATES[currency];
+        const finalPrice = estimatedPrice * currencyRate;
+
+        return {
+            basePrice: basePrice,
+            ageDiscount: ageDiscount,
+            hoursDiscount: hoursDiscount,
+            conditionMultiplier: conditionMultiplier,
+            estimatedPrice: estimatedPrice,
+            finalPrice: finalPrice,
+            currency: currency,
+            currencySymbol: CURRENCY_SYMBOLS[currency]
+        };
+    }
+
+    // ===== دالة عرض النتائج =====
+    function displayResults(calculation, currency) {
+        const resultDiv = document.getElementById('result');
+        const symbol = calculation.currencySymbol;
+
+        // عرض السعر النهائي
+        document.getElementById('price-display').textContent = 
+            formatPrice(calculation.finalPrice) + ' ' + symbol;
+
+        // عرض التفاصيل
+        document.getElementById('base-price-display').textContent = 
+            formatPrice(calculation.basePrice * CURRENCY_RATES[currency]) + ' ' + symbol;
+        
+        document.getElementById('age-discount-display').textContent = 
+            '- ' + formatPrice(calculation.ageDiscount * CURRENCY_RATES[currency]) + ' ' + symbol;
+        
+        document.getElementById('hours-discount-display').textContent = 
+            '- ' + formatPrice(calculation.hoursDiscount * CURRENCY_RATES[currency]) + ' ' + symbol;
+        
+        const conditionText = {
+            excellent: 'ممتازة (+15%)',
+            good: 'جيدة (بدون تعديل)',
+            fair: 'عادلة (-20%)',
+            poor: 'سيئة (-40%)'
+        };
+        
+        document.getElementById('condition-factor-display').textContent = 
+            conditionText[document.getElementById('condition').value];
+        
+        document.getElementById('final-price-display').textContent = 
+            formatPrice(calculation.finalPrice) + ' ' + symbol;
+
+        resultDiv.style.display = 'block';
+        resultDiv.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // ===== دالة تنسيق السعر =====
+    function formatPrice(price) {
+        return Math.round(price).toLocaleString('ar-SA');
+    }
+
+    // ===== دوال معالجة الأخطاء =====
+    function showError(message) {
+        errorDiv.textContent = message;
+        errorDiv.style.display = 'block';
+        document.getElementById('result').style.display = 'none';
+    }
+
+    function hideError() {
+        errorDiv.style.display = 'none';
+    }
+
+    // ===== معالج إعادة التعيين =====
+    document.getElementById('reset-btn').addEventListener('click', function() {
+        document.getElementById('result').style.display = 'none';
+        hideError();
+    });
 </script>
 
 </body>
