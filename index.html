@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TractorVision | حاسبة أسعار الجرارات</title>
+    <style>
+        :root {
+            --primary-green: #2ecc71;
+            --dark-green: #27ae60;
+            --dark-bg: #1a1a1a;
+            --card-bg: #2d2d2d;
+            --text-white: #ffffff;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--text-white);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            background-color: var(--card-bg);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            width: 100%;
+            max-width: 450px;
+            border-top: 5px solid var(--primary-green);
+        }
+
+        h1 {
+            text-align: center;
+            color: var(--primary-green);
+            margin-bottom: 25px;
+            font-size: 24px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        select, input {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: none;
+            background-color: #3d3d3d;
+            color: white;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+
+        button {
+            width: 100%;
+            padding: 15px;
+            background-color: var(--primary-green);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        button:hover {
+            background-color: var(--dark-green);
+        }
+
+        .result {
+            margin-top: 25px;
+            padding: 15px;
+            background-color: #383838;
+            border-radius: 8px;
+            text-align: center;
+            display: none;
+        }
+
+        .price {
+            font-size: 22px;
+            color: var(--primary-green);
+            font-weight: bold;
+            display: block;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>🚜 TractorVision</h1>
+    <p style="text-align: center; font-size: 14px; color: #bbb;">أداة إلياس لتقدير أسعار المعدات الثقيلة</p>
+    
+    <div class="input-group">
+        <label>نوع الجرار</label>
+        <select id="brand">
+            <option value="fendt">Fendt (بريميوم)</option>
+            <option value="johndeere">John Deere</option>
+            <option value="massey">Massey Ferguson</option>
+            <option value="steyr">Steyr</option>
+            <option value="other">ماركة أخرى</option>
+        </select>
+    </div>
+
+    <div class="input-group">
+        <label>سنة الصنع</label>
+        <input type="number" id="year" placeholder="مثلاً 2018" min="1990" max="2026">
+    </div>
+
+    <div class="input-group">
+        <label>ساعات العمل (Hours)</label>
+        <input type="number" id="hours" placeholder="مثلاً 5000">
+    </div>
+
+    <button onclick="calculatePrice()">احسب السعر التقريبي</button>
+
+    <div id="result" class="result">
+        <span id="result-text">السعر المتوقع في السوق:</span>
+        <span id="price-display" class="price"></span>
+    </div>
+</div>
+
+<script>
+    function calculatePrice() {
+        const brand = document.getElementById('brand').value;
+        const year = parseInt(document.getElementById('year').value);
+        const hours = parseInt(document.getElementById('hours').value);
+        
+        if (isNaN(year) || isNaN(hours)) {
+            alert("يرجى إدخال السنة وساعات العمل بشكل صحيح");
+            return;
+        }
+
+        // معادلة افتراضية للتقدير (يمكنك تعديلها بناءً على خبرتك)
+        let basePrice = 50000; 
+        
+        if (brand === 'fendt') basePrice = 80000;
+        if (brand === 'johndeere') basePrice = 70000;
+
+        // خصم السعر بناءً على العمر (5% لكل سنة)
+        const currentYear = 2026;
+        const age = currentYear - year;
+        let estimatedPrice = basePrice - (age * 3000);
+
+        // خصم بناءً على الساعات (مثلاً 2 دولار لكل ساعة)
+        estimatedPrice = estimatedPrice - (hours * 2);
+
+        // التأكد من أن السعر لا ينزل عن حد معين
+        if (estimatedPrice < 5000) estimatedPrice = 5000;
+
+        const display = document.getElementById('result');
+        const priceDisplay = document.getElementById('price-display');
+        
+        display.style.display = 'block';
+        priceDisplay.innerText = estimatedPrice.toLocaleString() + " يورو";
+    }
+</script>
+
+</body>
+</html>
