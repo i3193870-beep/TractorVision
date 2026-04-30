@@ -1,51 +1,36 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TractorVision | حاسبة أسعار الجرارات الذكية</title>
+    <title>TractorVision Ultra | Global Edition</title>
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
     <style>
         :root {
             --primary-green: #2ecc71;
-            --dark-green: #27ae60;
             --dark-bg: #0b0e11;
             --card-bg: #161b22;
             --text-white: #e6edf3;
             --accent-gold: #f1c40f;
-            --error-red: #e74c3c;
-            --warning-yellow: #f39c12;
-            --success-green: #2ecc71;
-            --light-gray: #555;
-        }
-
-        * {
-            box-sizing: border-box;
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #0b0e11 0%, #161b22 100%);
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background-color: var(--dark-bg);
             color: var(--text-white);
             margin: 0;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
             overflow-x: hidden;
         }
 
-        /* تأثير الخلفية المتحركة (الجزيئات) */
+        /* خلفية الجزيئات المتحركة */
         #particles-js {
             position: fixed;
             width: 100%;
             height: 100%;
             z-index: -1;
-            background: radial-gradient(circle at center, #1a2a1a 0%, #0b0e11 100%);
         }
 
-        /* القائمة الجانبية (Sidebar) */
+        /* القائمة الجانبية */
         .sidebar {
             height: 100%;
             width: 0;
@@ -54,952 +39,227 @@
             top: 0;
             right: 0;
             background-color: #0d1117;
-            overflow-x: hidden;
             transition: 0.5s;
             padding-top: 60px;
             border-left: 1px solid var(--primary-green);
+            box-shadow: -5px 0 15px rgba(0,0,0,0.5);
         }
 
-        .sidebar a, .sidebar h3 { 
-            padding: 15px; 
-            text-decoration: none; 
-            color: white; 
-            display: block; 
-        }
-        
-        .sidebar .closebtn { 
-            position: absolute; 
-            top: 0; 
-            left: 25px; 
-            font-size: 36px; 
-            cursor: pointer; 
-            color: var(--primary-green); 
+        .sidebar a {
+            padding: 15px 25px;
+            text-decoration: none;
+            font-size: 18px;
+            color: white;
+            display: block;
+            transition: 0.3s;
+            cursor: pointer;
+            border-bottom: 1px solid #21262d;
         }
 
-        /* زر القائمة الرئيسي */
+        .sidebar a:hover { background-color: #1c2128; color: var(--primary-green); }
+        .sidebar .closebtn { position: absolute; top: 0; left: 25px; font-size: 36px; color: var(--primary-green); }
+
+        /* أزرار اللغات */
+        .lang-switch { padding: 15px 25px; display: flex; gap: 10px; }
+        .lang-btn { 
+            padding: 5px 12px; cursor: pointer; border: 1px solid var(--primary-green); 
+            background: none; color: white; border-radius: 4px; font-size: 12px;
+            transition: 0.3s;
+        }
+        .lang-btn:hover { background: var(--primary-green); color: black; }
+
+        /* زر فتح القائمة */
         .openbtn {
-            font-size: 25px; 
-            cursor: pointer; 
-            background: var(--card-bg);
-            color: var(--primary-green); 
-            padding: 10px 15px; 
-            border: 1px solid var(--primary-green);
-            border-radius: 10px; 
-            position: fixed; 
-            top: 20px; 
-            right: 20px; 
-            z-index: 999;
+            font-size: 20px; cursor: pointer; background: var(--card-bg);
+            color: var(--primary-green); padding: 10px 15px; border: 1px solid var(--primary-green);
+            border-radius: 8px; position: fixed; top: 20px; right: 20px; z-index: 999;
         }
 
-        .nav-tabs {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-            width: 100%;
-            max-width: 500px;
-            background: var(--card-bg);
-            padding: 10px;
-            border-radius: 10px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-        }
-
-        .nav-btn {
-            flex: 1;
-            padding: 12px;
-            background: rgba(46, 204, 113, 0.2);
-            border: 2px solid #444;
-            color: var(--text-white);
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: all 0.3s ease;
-        }
-
-        .nav-btn.active {
-            background: var(--primary-green);
-            color: #000;
-            border-color: var(--primary-green);
-        }
-
-        .nav-btn:hover {
-            border-color: var(--primary-green);
-        }
-
+        /* الحاوية الرئيسية */
         .container {
-            background-color: var(--card-bg);
-            padding: 30px;
-            border-radius: 15px;
+            display: flex; flex-direction: column; align-items: center; padding: 80px 20px;
+        }
+
+        .main-card {
+            background: var(--card-bg); padding: 30px; border-radius: 20px;
+            width: 100%; max-width: 500px; border: 1px solid #30363d;
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            width: 100%;
-            max-width: 500px;
-            border-top: 5px solid var(--primary-green);
         }
 
-        .tab-content {
-            display: none;
-        }
+        .section { display: none; }
+        .section.active { display: block; animation: fadeIn 0.5s; }
 
-        .tab-content.active {
-            display: block;
-        }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        h1 {
-            text-align: center;
-            color: var(--primary-green);
-            margin-bottom: 10px;
-            margin-top: 0;
-            font-size: 28px;
-        }
-
-        .subtitle {
-            text-align: center;
-            font-size: 13px;
-            color: #999;
-            margin-bottom: 25px;
-            font-style: italic;
-        }
-
-        .input-group {
-            margin-bottom: 20px;
-        }
-
-        label {
-            display: flex;
-            align-items: center;
-            margin-bottom: 8px;
-            font-weight: bold;
-            font-size: 14px;
-        }
-
-        .help-icon {
-            cursor: help;
-            color: var(--primary-green);
-            margin-right: 5px;
-            font-size: 14px;
-            font-weight: bold;
-        }
-
-        select, input {
-            width: 100%;
-            padding: 12px;
-            border-radius: 8px;
-            border: 2px solid #454545;
-            background-color: #3d3d3d;
-            color: white;
-            font-size: 15px;
-            transition: border-color 0.3s ease;
-        }
-
-        select:focus, input:focus {
-            outline: none;
-            border-color: var(--primary-green);
-            background-color: #454545;
-        }
-
-        .button-group {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-
-        button {
-            flex: 1;
-            padding: 15px;
-            background-color: var(--primary-green);
-            color: white;
-            border: none;
-            border-radius: 8px;
+        input, select, button {
+            width: 100%; padding: 12px; margin: 10px 0; border-radius: 8px;
+            background: #0d1117; color: white; border: 1px solid #30363d;
             font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
         }
 
-        button:hover {
-            background-color: var(--dark-green);
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(46, 204, 113, 0.3);
-        }
+        .btn-calc { background: var(--primary-green); color: black; font-weight: bold; cursor: pointer; border: none; }
+        .btn-calc:hover { background: #27ae60; }
 
-        button:active {
-            transform: translateY(0);
-        }
-
-        .btn-secondary {
-            background-color: #555;
-        }
-
-        .btn-secondary:hover {
-            background-color: #666;
-        }
-
-        .error-message {
-            background-color: rgba(231, 76, 60, 0.2);
-            border-right: 4px solid var(--error-red);
-            color: #ff7675;
-            padding: 12px;
-            border-radius: 6px;
-            margin-bottom: 15px;
-            display: none;
-            font-size: 14px;
-        }
-
-        .success-message {
-            background-color: rgba(46, 204, 113, 0.2);
-            border-right: 4px solid var(--primary-green);
-            color: #7edf7e;
-            padding: 12px;
-            border-radius: 6px;
-            margin-bottom: 15px;
-            display: none;
-            font-size: 14px;
-        }
-
-        .result {
-            margin-top: 25px;
-            padding: 20px;
-            background-color: rgba(46, 204, 113, 0.1);
-            border-radius: 8px;
-            border-right: 4px solid var(--primary-green);
-            display: none;
-        }
-
-        .result-title {
-            font-size: 14px;
-            color: #aaa;
-            margin-bottom: 10px;
-        }
-
-        .price {
-            font-size: 32px;
-            color: var(--primary-green);
-            font-weight: bold;
-            display: block;
-            margin-bottom: 15px;
-        }
-
-        .breakdown {
-            background-color: #383838;
-            padding: 15px;
-            border-radius: 6px;
-            font-size: 13px;
-            line-height: 1.8;
-        }
-
-        .breakdown-item {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 8px;
-        }
-
-        .breakdown-item:last-child {
-            margin-bottom: 0;
-            border-top: 1px solid #555;
-            padding-top: 8px;
-            margin-top: 8px;
-            font-weight: bold;
-            color: var(--primary-green);
-        }
-
-        .breakdown-label {
-            color: #bbb;
-        }
-
-        .info-box {
-            background-color: rgba(243, 156, 18, 0.1);
-            border-right: 4px solid var(--warning-yellow);
-            padding: 12px;
-            border-radius: 6px;
-            font-size: 12px;
-            margin-top: 15px;
-            color: #daa;
-        }
-
-        .info-box h4 {
-            margin-top: 0;
-            margin-bottom: 8px;
-            color: var(--warning-yellow);
-        }
-
-        .info-box ul {
-            margin: 0;
-            padding-right: 20px;
-        }
-
-        .info-box li {
-            margin-bottom: 4px;
-        }
-
-        .comparison-results {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin-top: 20px;
-        }
-
-        .comparison-card {
-            background: rgba(46, 204, 113, 0.1);
-            padding: 15px;
-            border-radius: 8px;
-            border: 2px solid var(--primary-green);
-        }
-
-        .comparison-card h3 {
-            color: var(--primary-green);
-            margin-top: 0;
-            font-size: 14px;
-        }
-
-        .comparison-price {
-            font-size: 24px;
-            font-weight: bold;
-            color: var(--primary-green);
-            margin: 10px 0;
-        }
-
-        .comparison-details {
-            font-size: 12px;
-            color: #ccc;
-        }
-
-        .comparison-details p {
-            margin: 5px 0;
-        }
-
-        .copy-btn {
-            background: var(--light-gray);
-            padding: 8px 12px;
-            font-size: 12px;
-            margin-top: 10px;
-            width: 100%;
-        }
-
-        .copy-btn:hover {
-            background: #666;
-        }
-
-        .tooltip {
-            position: relative;
-            display: inline-block;
-        }
-
-        .tooltip .tooltiptext {
-            visibility: hidden;
-            width: 200px;
-            background-color: #333;
-            color: #fff;
-            text-align: center;
-            padding: 8px;
-            border-radius: 6px;
-            position: absolute;
-            z-index: 1;
-            bottom: 125%;
-            right: 50%;
-            margin-right: -100px;
-            opacity: 0;
-            transition: opacity 0.3s;
-            font-size: 12px;
-            border: 1px solid var(--primary-green);
-        }
-
-        .tooltip:hover .tooltiptext {
-            visibility: visible;
-            opacity: 1;
-        }
-
-        .history-item { 
-            font-size: 14px; 
-            padding: 10px; 
-            border-bottom: 1px solid #30363d; 
-        }
-
-        @media (max-width: 600px) {
-            .comparison-results {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .container {
-                padding: 20px;
-                max-width: 100%;
-            }
-
-            h1 {
-                font-size: 22px;
-            }
-
-            button {
-                font-size: 14px;
-                padding: 12px;
-            }
-
-            .price {
-                font-size: 24px;
-            }
-
-            .nav-tabs {
-                max-width: 100%;
-            }
-        }
+        /* تنسيق المقارنة والسجل */
+        .compare-box { background: #1c2128; padding: 15px; border-radius: 10px; margin-top: 10px; }
+        .history-item { padding: 10px; border-bottom: 1px solid #30363d; font-size: 14px; }
     </style>
 </head>
 <body>
 
 <div id="particles-js"></div>
 
-<button class="openbtn" onclick="openNav()">☰ القائمة</button>
+<button class="openbtn" onclick="openNav()">☰ Menu</button>
 
 <div id="mySidebar" class="sidebar">
     <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
-    <h3>⚖️ مقارنة الوحوش</h3>
-    <div style="padding:15px;">
-        <select id="comp1" onchange="compare()">
-            <option value="fendt">Fendt 1050</option>
-            <option value="jd">John Deere 9RX</option>
-            <option value="lanz">Lanz Bulldog</option>
-        </select>
-        <div id="compResult" style="font-size:13px; color:var(--accent-gold);"></div>
+    
+    <div class="lang-switch">
+        <button class="lang-btn" onclick="setLang('en')">EN</button>
+        <button class="lang-btn" onclick="setLang('de')">DE</button>
+        <button class="lang-btn" onclick="setLang('fr')">FR</button>
     </div>
-    <hr>
-    <h3>📜 سجل الحسابات</h3>
-    <div id="historyList" style="padding:15px;"></div>
-</div>
 
-<div class="nav-tabs">
-    <button class="nav-btn active" onclick="switchTab('calculator')">🧮 الحاسبة</button>
-    <button class="nav-btn" onclick="switchTab('comparison')">⚖️ المقارنة</button>
-    <button class="nav-btn" onclick="switchTab('history')">📊 السجل</button>
+    <a onclick="showSection('calc')" id="menu-calc">Calculator</a>
+    <a onclick="showSection('comp')" id="menu-comp">Compare</a>
+    <a onclick="showSection('hist')" id="menu-hist">History</a>
 </div>
 
 <div class="container">
-    <h1>🚜 TractorVision</h1>
-    <p class="subtitle">حاسبة ذكية لتقدير أسعار الجرارات والمعدات الثقيلة</p>
-    
-    <!-- TAB 1: CALCULATOR -->
-    <div id="calculator" class="tab-content active">
-        <div id="error-message" class="error-message"></div>
-        <div id="success-message" class="success-message"></div>
-
-        <form id="calculator-form">
-            <div class="input-group">
-                <label>
-                    <span class="help-icon tooltip">ℹ️
-                        <span class="tooltiptext">اختر ماركة الجرار المشهورة أو خيار آخر</span>
-                    </span>
-                    نوع الجرار / الماركة
-                </label>
-                <select id="brand" required>
-                    <option value="">-- اختر ماركة --</option>
-                    <option value="fendt">Fendt (بريميوم - فندت)</option>
-                    <option value="johndeere">John Deere (جون ديري)</option>
-                    <option value="massey">Massey Ferguson (ماسي فيرجسون)</option>
-                    <option value="steyr">Steyr (شتاير)</option>
-                    <option value="kubota">Kubota (كوبوتا)</option>
-                    <option value="case">Case IH</option>
-                    <option value="claas">Claas (كلاس)</option>
-                    <option value="other">ماركة أخرى</option>
-                </select>
-            </div>
-
-            <div class="input-group">
-                <label>
-                    <span class="help-icon tooltip">ℹ️
-                        <span class="tooltiptext">السنة التي تم تصنيع الجرار</span>
-                    </span>
-                    سنة الصنع / الموديل
-                </label>
-                <input type="number" id="year" placeholder="مثلاً 2018" min="1990" max="2026" required>
-            </div>
-
-            <div class="input-group">
-                <label>
-                    <span class="help-icon tooltip">ℹ️
-                        <span class="tooltiptext">إجمالي ساعات تشغيل الجرار</span>
-                    </span>
-                    ساعات العمل / التشغيل
-                </label>
-                <input type="number" id="hours" placeholder="مثلاً 5000" min="0" max="100000" required>
-            </div>
-
-            <div class="input-group">
-                <label>
-                    <span class="help-icon tooltip">ℹ️
-                        <span class="tooltiptext">حالة الجرار الحالية والميكانيكية</span>
-                    </span>
-                    حالة الجرار
-                </label>
-                <select id="condition" required>
-                    <option value="">-- اختر الحالة --</option>
-                    <option value="excellent">ممتازة (كسيح / جديد نسبياً)</option>
-                    <option value="good">جيدة (في حالة عمل جيدة)</option>
-                    <option value="fair">عادلة (بحاجة لصيانة بسيطة)</option>
-                    <option value="poor">سيئة (بحاجة إصلاحات كبيرة)</option>
-                </select>
-            </div>
-
-            <div class="input-group">
-                <label>
-                    <span class="help-icon tooltip">ℹ️
-                        <span class="tooltiptext">اختر العملة المراد عرض السعر بها</span>
-                    </span>
-                    العملة
-                </label>
-                <select id="currency">
-                    <option value="eur">€ يورو</option>
-                    <option value="usd">$ دولار أمريكي</option>
-                    <option value="sar">﷼ ريال سعودي</option>
-                    <option value="aed">د.إ درهم إماراتي</option>
-                    <option value="egp">£ جنيه مصري</option>
-                </select>
-            </div>
-
-            <div class="button-group">
-                <button type="submit" id="calculate-btn">احسب السعر التقريبي</button>
-                <button type="reset" class="btn-secondary" id="reset-btn">إعادة تعيين</button>
-            </div>
-        </form>
-
-        <div id="result" class="result">
-            <div class="result-title">السعر المتوقع في السوق:</div>
-            <span id="price-display" class="price"></span>
+    <div class="main-card">
+        <h2 id="main-title" style="text-align:center; color:var(--primary-green);">TractorVision PRO</h2>
+        
+        <div id="calc" class="section active">
+            <label id="lbl-model">Tractor Model</label>
+            <select id="model">
+                <option value="320000">Fendt 1050 Vario</option>
+                <option value="280000">John Deere 8R</option>
+                <option value="150000">Kirovets K-700</option>
+                <option value="45000">Lanz Bulldog</option>
+            </select>
             
-            <div class="breakdown">
-                <div class="breakdown-item">
-                    <span class="breakdown-label">السعر الأساسي:</span>
-                    <span id="base-price-display">-</span>
-                </div>
-                <div class="breakdown-item">
-                    <span class="breakdown-label">خصم العمر:</span>
-                    <span id="age-discount-display">-</span>
-                </div>
-                <div class="breakdown-item">
-                    <span class="breakdown-label">خصم ساعات العمل:</span>
-                    <span id="hours-discount-display">-</span>
-                </div>
-                <div class="breakdown-item">
-                    <span class="breakdown-label">معامل الحالة:</span>
-                    <span id="condition-factor-display">-</span>
-                </div>
-                <div class="breakdown-item">
-                    <span class="breakdown-label">السعر النهائي المقدر:</span>
-                    <span id="final-price-display">-</span>
-                </div>
-            </div>
+            <label id="lbl-year">Year</label>
+            <input type="number" id="year" value="2022">
+            
+            <label id="lbl-hours">Work Hours</label>
+            <input type="number" id="hours" placeholder="0000">
+            
+            <button class="btn-calc" onclick="calculate()" id="btn-calc">Calculate Price</button>
+            <div id="result" style="text-align:center; font-size:24px; margin-top:15px; color:var(--accent-gold);"></div>
         </div>
 
-        <div class="info-box">
-            <h4>📌 معلومات مهمة</h4>
-            <ul>
-                <li>هذا التقدير تقريبي بناءً على معايير السوق العامة</li>
-                <li>السعر الفعلي قد يختلف حسب الموقع والحالة الحقيقية</li>
-                <li>ننصح بفحص ميكانيكي شامل قبل الشراء</li>
-                <li>تأكد من توثيق ملكية الجرار والصيانة الدورية</li>
-            </ul>
+        <div id="comp" class="section">
+            <h3 id="comp-title">Comparison</h3>
+            <select id="comp-select" onchange="runCompare()">
+                <option value="fendt">Fendt 1050 Vario</option>
+                <option value="jd">John Deere 9RX</option>
+                <option value="kirovets">Kirovets K-700</option>
+                <option value="lanz">Lanz Bulldog</option>
+            </select>
+            <div id="comp-result" class="compare-box"></div>
         </div>
-    </div>
 
-    <!-- TAB 2: COMPARISON -->
-    <div id="comparison" class="tab-content">
-        <div id="comparison-error" class="error-message"></div>
-
-        <form id="comparison-form">
-            <div class="input-group">
-                <label>الجرار الأول:</label>
-                <select id="comp-brand-1" required>
-                    <option value="">-- اختر ماركة --</option>
-                    <option value="fendt">Fendt (بريميوم)</option>
-                    <option value="johndeere">John Deere</option>
-                    <option value="massey">Massey Ferguson</option>
-                    <option value="case">Case IH</option>
-                    <option value="claas">Claas</option>
-                    <option value="other">ماركة أخرى</option>
-                </select>
-                <select id="comp-year-1" required style="margin-top: 10px;">
-                    <option value="">-- اختر السنة --</option>
-                </select>
-            </div>
-
-            <div class="input-group">
-                <label>الجرار الثاني:</label>
-                <select id="comp-brand-2" required>
-                    <option value="">-- اخ��ر ماركة --</option>
-                    <option value="johndeere">John Deere</option>
-                    <option value="fendt">Fendt</option>
-                    <option value="massey">Massey Ferguson</option>
-                    <option value="case">Case IH</option>
-                    <option value="claas">Claas</option>
-                </select>
-                <select id="comp-year-2" required style="margin-top: 10px;">
-                    <option value="">-- اختر السنة --</option>
-                </select>
-            </div>
-
-            <button type="submit">قارن الأسعار</button>
-        </form>
-
-        <div id="comparison-results" class="comparison-results"></div>
-    </div>
-
-    <!-- TAB 3: HISTORY -->
-    <div id="history" class="tab-content">
-        <h3 style="color: var(--primary-green); text-align: center;">📊 السجل الأخير</h3>
-        <div id="history-list" style="max-height: 400px; overflow-y: auto;"></div>
-        <button onclick="clearHistory()" class="btn-secondary" style="margin-top: 15px; width: 100%;">حذف السجل</button>
+        <div id="hist" class="section">
+            <h3 id="hist-title">Recent History</h3>
+            <div id="history-list"></div>
+        </div>
     </div>
 </div>
 
 <script>
-    // ===== إعدادات ثابتة =====
-    const PRICE_CONFIG = {
-        fendt: { base: 85000, depreciationRate: 0.08 },
-        johndeere: { base: 75000, depreciationRate: 0.07 },
-        massey: { base: 60000, depreciationRate: 0.06 },
-        steyr: { base: 65000, depreciationRate: 0.07 },
-        kubota: { base: 55000, depreciationRate: 0.06 },
-        case: { base: 70000, depreciationRate: 0.065 },
-        claas: { base: 82000, depreciationRate: 0.08 },
-        other: { base: 50000, depreciationRate: 0.05 }
+    // بيانات الجرارات للمقارنة
+    const tractorData = {
+        fendt: { en: "517 HP, Vario transmission, high comfort.", de: "517 PS, Vario-Getriebe, hoher Komfort.", fr: "517 CV, transmission Vario, grand confort." },
+        jd: { en: "640 HP, AI technology, expensive parts.", de: "640 PS, KI-Technologie, teure Ersatzteile.", fr: "640 CV, technologie IA, pièces chères." },
+        kirovets: { en: "300 HP, V8 Turbo, unbreakable build.", de: "300 PS, V8 Turbo, unzerstörbare Bauweise.", fr: "300 CV, V8 Turbo, construction incassable." },
+        lanz: { en: "55 HP, Classic, high fuel consumption.", de: "55 PS, Klassiker, hoher Kraftstoffverbrauch.", fr: "55 CV, Classique, consommation élevée." }
     };
 
-    const CONDITION_MULTIPLIERS = {
-        excellent: 1.15,
-        good: 1.0,
-        fair: 0.80,
-        poor: 0.60
+    const translations = {
+        en: {
+            calc: "Calculator", comp: "Compare", hist: "History",
+            lblModel: "Tractor Model", lblYear: "Year", lblHours: "Work Hours",
+            btnCalc: "Calculate Price", compTitle: "Comparison", histTitle: "History",
+            currency: "€"
+        },
+        de: {
+            calc: "Rechner", comp: "Vergleichen", hist: "Verlauf",
+            lblModel: "Traktormodell", lblYear: "Baujahr", lblHours: "Betriebsstunden",
+            btnCalc: "Preis berechnen", compTitle: "Vergleich", histTitle: "Verlauf",
+            currency: "€"
+        },
+        fr: {
+            calc: "Calculatrice", comp: "Comparer", hist: "Historique",
+            lblModel: "Modèle de Tracteur", lblYear: "Année", lblHours: "Heures de travail",
+            btnCalc: "Calculer le prix", compTitle: "Comparaison", histTitle: "Historique",
+            currency: "€"
+        }
     };
 
-    const CURRENCY_SYMBOLS = {
-        eur: '€',
-        usd: '$',
-        sar: '﷼',
-        aed: 'د.إ',
-        egp: '£'
-    };
+    let currentLang = 'en';
 
-    const CURRENCY_RATES = {
-        eur: 1,
-        usd: 1.1,
-        sar: 4.15,
-        aed: 4.03,
-        egp: 27
-    };
+    function setLang(lang) {
+        currentLang = lang;
+        const t = translations[lang];
+        document.getElementById('menu-calc').innerText = t.calc;
+        document.getElementById('menu-comp').innerText = t.comp;
+        document.getElementById('menu-hist').innerText = t.hist;
+        document.getElementById('lbl-model').innerText = t.lblModel;
+        document.getElementById('lbl-year').innerText = t.lblYear;
+        document.getElementById('lbl-hours').innerText = t.lblHours;
+        document.getElementById('btn-calc').innerText = t.btnCalc;
+        document.getElementById('comp-title').innerText = t.compTitle;
+        document.getElementById('hist-title').innerText = t.histTitle;
+        runCompare(); // تحديث لغة المقارنة إذا كانت مفتوحة
+        closeNav();
+    }
 
-    const HOUR_DEDUCTION_PER_100 = 200;
-    const MIN_PRICE = 5000;
-    const CURRENT_YEAR = 2026;
-    const MAX_HISTORY = 10;
+    function openNav() { document.getElementById("mySidebar").style.width = "280px"; }
+    function closeNav() { document.getElementById("mySidebar").style.width = "0"; }
 
-    // ===== متغيرات عامة =====
-    const form = document.getElementById('calculator-form');
-    const errorDiv = document.getElementById('error-message');
-    const successDiv = document.getElementById('success-message');
-    let calculationHistory = JSON.parse(localStorage.getItem('tractorHistory')) || [];
+    function showSection(id) {
+        document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+        closeNav();
+    }
 
-    // ===== التعامل مع التبويبات =====
-    function switchTab(tabName) {
-        document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
-        document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+    function calculate() {
+        const base = document.getElementById('model').value;
+        const yr = document.getElementById('year').value;
+        const hr = document.getElementById('hours').value;
+        let res = base - ((2026 - yr) * (base * 0.05)) - (hr * 5);
+        if(res < 5000) res = 5000;
+        document.getElementById('result').innerText = Math.round(res).toLocaleString() + " €";
         
-        document.getElementById(tabName).classList.add('active');
-        event.target.classList.add('active');
+        const item = document.createElement('div');
+        item.className = "history-item";
+        item.innerText = Math.round(res).toLocaleString() + " € (" + yr + ")";
+        document.getElementById('history-list').prepend(item);
+    }
 
-        if (tabName === 'history') {
-            displayHistory();
+    function runCompare() {
+        const model = document.getElementById('comp-select').value;
+        document.getElementById('comp-result').innerText = tractorData[model][currentLang];
+    }
+
+    // إعداد خلفية الجزيئات
+    particlesJS("particles-js", {
+        "particles": {
+            "number": { "value": 80 },
+            "color": { "value": "#2ecc71" },
+            "shape": { "type": "circle" },
+            "opacity": { "value": 0.5 },
+            "size": { "value": 3 },
+            "line_linked": { "enable": true, "distance": 150, "color": "#2ecc71", "opacity": 0.4, "width": 1 },
+            "move": { "enable": true, "speed": 2 }
+        },
+        "interactivity": {
+            "events": { "onhover": { "enable": true, "mode": "repulse" } }
         }
-    }
-
-    // فتح وإغلاق القائمة الجانبية
-    function openNav() { 
-        document.getElementById("mySidebar").style.width = "300px"; 
-    }
-    
-    function closeNav() { 
-        document.getElementById("mySidebar").style.width = "0"; 
-    }
-
-    // ===== السجل =====
-    function saveToHistory(data) {
-        calculationHistory.unshift({
-            ...data,
-            timestamp: new Date().toLocaleString('ar-SA')
-        });
-        if (calculationHistory.length > MAX_HISTORY) {
-            calculationHistory.pop();
-        }
-        localStorage.setItem('tractorHistory', JSON.stringify(calculationHistory));
-    }
-
-    function displayHistory() {
-        const historyList = document.getElementById('history-list');
-        if (calculationHistory.length === 0) {
-            historyList.innerHTML = '<p style="text-align: center; color: #888;">لا توجد عمليات حسابية سابقة</p>';
-            return;
-        }
-
-        historyList.innerHTML = calculationHistory.map((item, index) => `
-            <div style="background: rgba(46, 204, 113, 0.1); padding: 12px; margin: 10px 0; border-radius: 6px; border-right: 3px solid var(--primary-green);">
-                <p style="margin: 5px 0; font-size: 12px; color: #aaa;">⏰ ${item.timestamp}</p>
-                <p style="margin: 5px 0; font-size: 14px; color: white;"><b>${item.brand}</b> - ${item.year}</p>
-                <p style="margin: 5px 0; font-size: 12px; color: var(--primary-green);"><b>${item.price} ${item.currency}</b></p>
-            </div>
-        `).join('');
-    }
-
-    function clearHistory() {
-        if (confirm('هل تريد حذف السجل بالكامل؟')) {
-            calculationHistory = [];
-            localStorage.removeItem('tractorHistory');
-            displayHistory();
-            showSuccess('تم حذف السجل بنجاح');
-        }
-    }
-
-    // ===== التعامل مع نموذج الحساب =====
-    form.addEventListener('submit', function(e) {
-        e.preventDefault();
-        calculatePrice();
     });
 
-    // ===== دالة الحساب الرئيسية =====
-    function calculatePrice() {
-        hideError();
-        hideSuccess();
-
-        const brand = document.getElementById('brand').value;
-        const year = parseInt(document.getElementById('year').value);
-        const hours = parseInt(document.getElementById('hours').value);
-        const condition = document.getElementById('condition').value;
-        const currency = document.getElementById('currency').value;
-
-        const validation = validateInputs(brand, year, hours, condition);
-        if (!validation.valid) {
-            showError(validation.message);
-            return;
-        }
-
-        const calculation = calculateEstimatedPrice(brand, year, hours, condition, currency);
-        displayResults(calculation, currency);
-        
-        // حفظ في السجل
-        saveToHistory({
-            brand: document.getElementById('brand').options[document.getElementById('brand').selectedIndex].text,
-            year: year,
-            hours: hours,
-            condition: condition,
-            price: formatPrice(calculation.finalPrice),
-            currency: CURRENCY_SYMBOLS[currency]
-        });
-
-        showSuccess('✅ تم حساب السعر بنجاح!');
-    }
-
-    // ===== دالة التحقق من صحة المدخلات =====
-    function validateInputs(brand, year, hours, condition) {
-        if (!brand) {
-            return { valid: false, message: '⚠️ يرجى اختيار ماركة الجرار' };
-        }
-
-        if (isNaN(year) || year < 1990 || year > CURRENT_YEAR) {
-            return { valid: false, message: `⚠️ يرجى إدخال سنة صحيحة بين 1990 و ${CURRENT_YEAR}` };
-        }
-
-        if (isNaN(hours) || hours < 0 || hours > 100000) {
-            return { valid: false, message: '⚠️ يرجى إدخال عدد ساعات صحيح (0 - 100000)' };
-        }
-
-        if (!condition) {
-            return { valid: false, message: '⚠️ يرجى اختيار حالة الجرار' };
-        }
-
-        return { valid: true };
-    }
-
-    // ===== دالة حساب السعر المقدر =====
-    function calculateEstimatedPrice(brand, year, hours, condition, currency) {
-        const config = PRICE_CONFIG[brand] || PRICE_CONFIG.other;
-        let basePrice = config.base;
-
-        const age = CURRENT_YEAR - year;
-        let ageDiscount = 0;
-        
-        if (age > 0) {
-            const depreciationFactor = config.depreciationRate;
-            ageDiscount = basePrice * (1 - Math.pow(1 - depreciationFactor, age));
-        }
-
-        const hoursDiscount = (hours / 100) * HOUR_DEDUCTION_PER_100;
-        const conditionMultiplier = CONDITION_MULTIPLIERS[condition];
-
-        let estimatedPrice = basePrice - ageDiscount - hoursDiscount;
-        estimatedPrice = estimatedPrice * conditionMultiplier;
-
-        if (estimatedPrice < MIN_PRICE) {
-            estimatedPrice = MIN_PRICE;
-        }
-
-        const currencyRate = CURRENCY_RATES[currency];
-        const finalPrice = estimatedPrice * currencyRate;
-
-        return {
-            basePrice: basePrice,
-            ageDiscount: ageDiscount,
-            hoursDiscount: hoursDiscount,
-            conditionMultiplier: conditionMultiplier,
-            estimatedPrice: estimatedPrice,
-            finalPrice: finalPrice,
-            currency: currency,
-            currencySymbol: CURRENCY_SYMBOLS[currency]
-        };
-    }
-
-    // ===== دالة عرض النتائج =====
-    function displayResults(calculation, currency) {
-        const resultDiv = document.getElementById('result');
-        const symbol = calculation.currencySymbol;
-
-        document.getElementById('price-display').textContent = 
-            formatPrice(calculation.finalPrice) + ' ' + symbol;
-        
-        document.getElementById('base-price-display').textContent = 
-            formatPrice(calculation.basePrice * CURRENCY_RATES[currency]) + ' ' + symbol;
-        
-        document.getElementById('age-discount-display').textContent = 
-            '- ' + formatPrice(calculation.ageDiscount * CURRENCY_RATES[currency]) + ' ' + symbol;
-        
-        document.getElementById('hours-discount-display').textContent = 
-            '- ' + formatPrice(calculation.hoursDiscount * CURRENCY_RATES[currency]) + ' ' + symbol;
-        
-        const conditionText = {
-            excellent: 'ممتازة (+15%)',
-            good: 'جيدة (بدون تعديل)',
-            fair: 'عادلة (-20%)',
-            poor: 'سيئة (-40%)'
-        };
-        
-        document.getElementById('condition-factor-display').textContent = 
-            conditionText[document.getElementById('condition').value];
-        
-        document.getElementById('final-price-display').textContent = 
-            formatPrice(calculation.finalPrice) + ' ' + symbol;
-
-        resultDiv.style.display = 'block';
-        resultDiv.scrollIntoView({ behavior: 'smooth' });
-    }
-
-    // ===== دالة تنسيق السعر =====
-    function formatPrice(price) {
-        return Math.round(price).toLocaleString('ar-SA');
-    }
-
-    // ===== دوال معالجة الأخطاء =====
-    function showError(message) {
-        errorDiv.textContent = message;
-        errorDiv.style.display = 'block';
-        document.getElementById('result').style.display = 'none';
-    }
-
-    function hideError() {
-        errorDiv.style.display = 'none';
-    }
-
-    function showSuccess(message) {
-        successDiv.textContent = message;
-        successDiv.style.display = 'block';
-        setTimeout(() => hideSuccess(), 3000);
-    }
-
-    function hideSuccess() {
-        successDiv.style.display = 'none';
-    }
-
-    // ===== معالج إعادة التعيين =====
-    document.getElementById('reset-btn').addEventListener('click', function() {
-        document.getElementById('result').style.display = 'none';
-        hideError();
-        hideSuccess();
-    });
-
-    // ===== نموذج المقارنة =====
-    document.getElementById('comparison-form').addEventListener('submit', function(e) {
-        e.preventDefault();
-        compareTractors();
-    });
-
-    function compareTractors() {
-        const brand1 = document.getElementById('comp-brand-1').value;
-        const year1 = parseInt(document.getElementById('comp-year-1').value);
-        const brand2 = document.getElementById('comp-brand-2').value;
-        const year2 = parseInt(document.getElementById('comp-year-2').value);
-
-        if (!brand1 || !year1 || !brand2 || !year2) {
-            document.getElementById('comparison-error').textContent = '⚠️ يرجى اختيار جميع الحقول';
-            document.getElementById('comparison-error').style.display = 'block';
-            return;
-        }
-
-        const calc1 = calculateEstimatedPrice(brand1, year1, 5000, 'good', 'eur');
-        const calc2 = calculateEstimatedPrice(brand2, year2, 5000, 'good', 'eur');
-
-        const brand1Name = document.getElementById('comp-brand-1').options[document.getElementById('comp-brand-1').selectedIndex].text;
-        const brand2Name = document.getElementById('comp-brand-2').options[document.getElementById('comp-brand-2').selectedIndex].text;
-
-        const resultsDiv = document.getElementById('comparison-results');
-        resultsDiv.innerHTML = `
-            <div class="comparison-card">
-                <h3>${brand1Name} ${year1}</h3>
-                <div class="comparison-price">${formatPrice(calc1.finalPrice)} €</div>
-                <div class="comparison-details">
-                    <p><b>السعر الأساسي:</b> ${formatPrice(calc1.basePrice)} €</p>
-                    <p><b>خصم العمر:</b> -${formatPrice(calc1.ageDiscount)} €</p>
-                </div>
-            </div>
-            <div class="comparison-card">
-                <h3>${brand2Name} ${year2}</h3>
-                <div class="comparison-price">${formatPrice(calc2.finalPrice)} €</div>
-                <div class="comparison-details">
-                    <p><b>السعر الأساسي:</b> ${formatPrice(calc2.basePrice)} €</p>
-                    <p><b>خصم العمر:</b> -${formatPrice(calc2.ageDiscount)} €</p>
-                </div>
-            </div>
-        `;
-
-        const diff = Math.abs(calc1.finalPrice - calc2.finalPrice);
-        const cheaper = calc1.finalPrice < calc2.finalPrice ? brand1Name : brand2Name;
-        const diffPercent = ((diff / Math.max(calc1.finalPrice, calc2.finalPrice)) * 100).toFixed(1);
-
-        resultsDiv.innerHTML += `
-            <div style="grid-column: 1 / -1; background: rgba(46, 204, 113, 0.2); padding: 15px; border-radius: 8px; margin-top: 15px;">
-                <p style="margin: 0; color: var(--primary-green);"><b>الفارق:</b> ${formatPrice(diff)} € (${diffPercent}%)</p>
-                <p style="margin: 10px 0 0 0; color: #aaa;"><b>${cheaper}</b> أرخص سعراً</p>
-            </div>
-        `;
-
-        document.getElementById('comparison-error').style.display = 'none';
-    }
-
-    // ملء السنوات
-    function fillYears(selectId) {
-        const select = document.getElementById(selectId);
-        select.innerHTML = '<option value="">-- اختر السنة --</option>';
-        for (let year = 1990; year <= CURRENT_YEAR; year++) {
-            select.innerHTML += `<option value="${year}">${year}</option>`;
-        }
-    }
-
-    fillYears('comp-year-1');
-    fillYears('comp-year-2');
-
-    // ===== دالة المقارنة من القائمة الجانبية =====
-    function compare() {
-        const val = document.getElementById('comp1').value;
-        const info = {
-            fendt: "Fendt 1050: 517 حصان، محرك MAN، ناقل Vario.",
-            jd: "JD 9RX: 640 حصان، جنزير رباعي، تكنولوجيا AI.",
-            lanz: "Lanz: 55 حصان، كلاسيك، ميكانيكا بسيطة."
-        };
-        document.getElementById('compResult').innerText = info[val];
-    }
+    // تشغيل المقارنة الافتراضية
+    runCompare();
 </script>
 
 </body>
