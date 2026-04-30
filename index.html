@@ -8,9 +8,10 @@
         :root {
             --primary-green: #2ecc71;
             --dark-green: #27ae60;
-            --dark-bg: #1a1a1a;
-            --card-bg: #2d2d2d;
-            --text-white: #ffffff;
+            --dark-bg: #0b0e11;
+            --card-bg: #161b22;
+            --text-white: #e6edf3;
+            --accent-gold: #f1c40f;
             --error-red: #e74c3c;
             --warning-yellow: #f39c12;
             --success-green: #2ecc71;
@@ -23,7 +24,7 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            background: linear-gradient(135deg, #0b0e11 0%, #161b22 100%);
             color: var(--text-white);
             margin: 0;
             padding: 20px;
@@ -32,6 +33,62 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* تأثير الخلفية المتحركة (الجزيئات) */
+        #particles-js {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: radial-gradient(circle at center, #1a2a1a 0%, #0b0e11 100%);
+        }
+
+        /* القائمة الجانبية (Sidebar) */
+        .sidebar {
+            height: 100%;
+            width: 0;
+            position: fixed;
+            z-index: 1000;
+            top: 0;
+            right: 0;
+            background-color: #0d1117;
+            overflow-x: hidden;
+            transition: 0.5s;
+            padding-top: 60px;
+            border-left: 1px solid var(--primary-green);
+        }
+
+        .sidebar a, .sidebar h3 { 
+            padding: 15px; 
+            text-decoration: none; 
+            color: white; 
+            display: block; 
+        }
+        
+        .sidebar .closebtn { 
+            position: absolute; 
+            top: 0; 
+            left: 25px; 
+            font-size: 36px; 
+            cursor: pointer; 
+            color: var(--primary-green); 
+        }
+
+        /* زر القائمة الرئيسي */
+        .openbtn {
+            font-size: 25px; 
+            cursor: pointer; 
+            background: var(--card-bg);
+            color: var(--primary-green); 
+            padding: 10px 15px; 
+            border: 1px solid var(--primary-green);
+            border-radius: 10px; 
+            position: fixed; 
+            top: 20px; 
+            right: 20px; 
+            z-index: 999;
         }
 
         .nav-tabs {
@@ -350,6 +407,12 @@
             opacity: 1;
         }
 
+        .history-item { 
+            font-size: 14px; 
+            padding: 10px; 
+            border-bottom: 1px solid #30363d; 
+        }
+
         @media (max-width: 600px) {
             .comparison-results {
                 grid-template-columns: 1fr;
@@ -382,6 +445,26 @@
     </style>
 </head>
 <body>
+
+<div id="particles-js"></div>
+
+<button class="openbtn" onclick="openNav()">☰ القائمة</button>
+
+<div id="mySidebar" class="sidebar">
+    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
+    <h3>⚖️ مقارنة الوحوش</h3>
+    <div style="padding:15px;">
+        <select id="comp1" onchange="compare()">
+            <option value="fendt">Fendt 1050</option>
+            <option value="jd">John Deere 9RX</option>
+            <option value="lanz">Lanz Bulldog</option>
+        </select>
+        <div id="compResult" style="font-size:13px; color:var(--accent-gold);"></div>
+    </div>
+    <hr>
+    <h3>📜 سجل الحسابات</h3>
+    <div id="historyList" style="padding:15px;"></div>
+</div>
 
 <div class="nav-tabs">
     <button class="nav-btn active" onclick="switchTab('calculator')">🧮 الحاسبة</button>
@@ -540,7 +623,7 @@
             <div class="input-group">
                 <label>الجرار الثاني:</label>
                 <select id="comp-brand-2" required>
-                    <option value="">-- اختر ماركة --</option>
+                    <option value="">-- اخ��ر ماركة --</option>
                     <option value="johndeere">John Deere</option>
                     <option value="fendt">Fendt</option>
                     <option value="massey">Massey Ferguson</option>
@@ -626,6 +709,15 @@
         }
     }
 
+    // فتح وإغلاق القائمة الجانبية
+    function openNav() { 
+        document.getElementById("mySidebar").style.width = "300px"; 
+    }
+    
+    function closeNav() { 
+        document.getElementById("mySidebar").style.width = "0"; 
+    }
+
     // ===== السجل =====
     function saveToHistory(data) {
         calculationHistory.unshift({
@@ -649,7 +741,7 @@
             <div style="background: rgba(46, 204, 113, 0.1); padding: 12px; margin: 10px 0; border-radius: 6px; border-right: 3px solid var(--primary-green);">
                 <p style="margin: 5px 0; font-size: 12px; color: #aaa;">⏰ ${item.timestamp}</p>
                 <p style="margin: 5px 0; font-size: 14px; color: white;"><b>${item.brand}</b> - ${item.year}</p>
-                <p style="margin: 5px 0; font-size: 12px; color: var(--primary-green);"><b>${item.price} ${item.currency.toUpperCase()}</b></p>
+                <p style="margin: 5px 0; font-size: 12px; color: var(--primary-green);"><b>${item.price} ${item.currency}</b></p>
             </div>
         `).join('');
     }
@@ -897,6 +989,17 @@
 
     fillYears('comp-year-1');
     fillYears('comp-year-2');
+
+    // ===== دالة المقارنة من القائمة الجانبية =====
+    function compare() {
+        const val = document.getElementById('comp1').value;
+        const info = {
+            fendt: "Fendt 1050: 517 حصان، محرك MAN، ناقل Vario.",
+            jd: "JD 9RX: 640 حصان، جنزير رباعي، تكنولوجيا AI.",
+            lanz: "Lanz: 55 حصان، كلاسيك، ميكانيكا بسيطة."
+        };
+        document.getElementById('compResult').innerText = info[val];
+    }
 </script>
 
 </body>
